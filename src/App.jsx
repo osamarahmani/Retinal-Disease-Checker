@@ -14,48 +14,50 @@ function App() {
   const [prediction, setPrediction] = useState("");
   const [confidence, setConfidence] = useState(null);
 
- const handleImageChange = (e) => {
-  const file = e.target.files[0];
-  if (file && file.type.startsWith("image/")) {
-    const imageUrl = URL.createObjectURL(file);
-    setSelectedImage(imageUrl);
-    setScanning(true);
-    setScanned(false);
-    setPrediction("");
-    setConfidence(null);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      setScanning(true);
+      setScanned(false);
+      setPrediction("");
+      setConfidence(null);
 
-    // Part 1: Get the prediction early (after 2s)
-    setTimeout(async () => {
-      const formData = new FormData();
-      formData.append("file", file);
+      // Part 1: Get the prediction early (after 2s)
+      setTimeout(async () => {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      try {
-        const res = await fetch("http://localhost:8000/predict", {
-          method: "POST",
-          body: formData,
-        });
+        try {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/predict`, {
+            method: "POST",
+            body: formData,
+          });
+          
+          console.log("FETCHING FROM:", `${import.meta.env.VITE_BACKEND_URL}/predict`);
 
-        const data = await res.json();
-        setPrediction(data.prediction);
-        if (data.confidence) setConfidence(data.confidence);
-      } catch (err) {
-        console.error("Error predicting:", err);
-        setPrediction("Prediction failed. Try again.");
-      }
-    }, 2000); // 👈 show result after 2 seconds
+          const data = await res.json();
+          setPrediction(data.prediction);
+          if (data.confidence) setConfidence(data.confidence);
+        } catch (err) {
+          console.error("Error predicting:", err);
+          setPrediction("Prediction failed. Try again.");
+        }
+      }, 2000); // 👈 show result after 2 seconds
 
-    // Part 2: End scanning animation after 5s
-    setTimeout(() => {
-      setScanning(false);
-      setScanned(true);
-    }, 5000);
-  }
-};
+      // Part 2: End scanning animation after 5s
+      setTimeout(() => {
+        setScanning(false);
+        setScanned(true);
+      }, 5000);
+    }
+  };
 
 
   return (
     <div className="min-h-screen h-full w-full bg-black text-white font-sans overflow-auto">
-     
+
       <div className="absolute inset-0 animate-gradient bg-gradient-to-br from-cyan-900 via-black to-cyan-900 opacity-90 backdrop-blur-md z-0" />
 
       <div className="relative z-10">

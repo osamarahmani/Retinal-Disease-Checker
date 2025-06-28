@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-
 const diseases = [
   {
     name: "Cataract",
@@ -56,44 +55,58 @@ function About() {
   };
 
   return (
-    <div className="min-h-screen h-full w-full bg-black text-white font-sans overflow-auto"  >
-      <div className="absolute inset-0 animate-gradient bg-gradient-to-br from-cyan-900 via-black to-cyan-900 opacity-90 backdrop-blur-md z-0">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-black text-white font-sans overflow-auto px-4 sm:px-6 md:px-10">
+      <div className="absolute inset-0 animate-gradient bg-gradient-to-br from-cyan-900 via-black to-cyan-900 opacity-90 backdrop-blur-md z-0" />
+      <div className="relative z-10 max-w-7xl mx-auto py-16">
         <h1 className="text-4xl font-bold text-center text-cyan-400 mb-12">
           About Eye Diseases
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {diseases.map((disease, index) => (
-            <div
-              key={index}
-              className="group relative overflow-hidden rounded-2xl border border-cyan-500 shadow-lg bg-white/10 backdrop-blur"
-              onClick={() => toggleExpand(index)}
-            >
-              <img
-                src={disease.image}
-                alt={disease.name}
-                className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-black/80 text-white p-4 translate-y-full group-hover:translate-y-0 transition-all duration-500">
-                <h2 className="text-lg font-bold text-cyan-300">{disease.name}</h2>
-                <p className="text-sm mt-1 text-gray-300">{disease.description}</p>
-              </div>
-              {expandedIndex === index && (
-                <div className="bg-black/90 px-4 py-3 text-sm mt-1">
-                  <h3 className="font-semibold text-cyan-300">Common Symptoms:</h3>
-                  <ul className="list-disc list-inside text-gray-300 mt-1">
-                    {disease.symptoms.map((symptom, i) => (
-                      <li key={i}>{symptom}</li>
-                    ))}
-                  </ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {diseases.map((disease, index) => {
+            const isExpanded = expandedIndex === index;
+            return (
+              <div key={index} className="rounded-2xl overflow-hidden border border-cyan-500 bg-white/10 backdrop-blur shadow-lg">
+                {/* Card (clickable) */}
+                <div
+                  className="group relative h-64 w-full cursor-pointer"
+                  onClick={() => toggleExpand(index)}
+                >
+                  <img
+                    src={disease.image}
+                    alt={disease.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div
+                    className={`absolute inset-x-0 bottom-0 bg-black/80 text-white p-4 transition-transform duration-500 ease-in-out
+                    ${
+                      isExpanded
+                        ? "translate-y-0"
+                        : "translate-y-full group-hover:translate-y-0"
+                    }`}
+                  >
+                    <h2 className="text-lg font-bold text-cyan-300">{disease.name}</h2>
+                    <p className="text-sm mt-1 text-gray-300">{disease.description}</p>
+                  </div>
                 </div>
-              )}
-            </div>
-          ))}
+
+                {/* Symptoms (below the image) */}
+                {isExpanded && (
+                  <div className="bg-black/90 px-4 py-3 text-sm">
+                    <h3 className="font-semibold text-cyan-300">Common Symptoms:</h3>
+                    <ul className="list-disc list-inside text-gray-300 mt-1">
+                      {disease.symptoms.map((symptom, i) => (
+                        <li key={i}>{symptom}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-
+        {/* Info section */}
         <div className="mt-20 bg-white/10 border border-cyan-500 p-6 rounded-xl shadow-xl max-w-4xl mx-auto">
           <h2 className="text-2xl text-cyan-400 font-bold mb-4 text-center">
             Retinal Health & AI Diagnosis
@@ -102,6 +115,8 @@ function About() {
             Early detection of retinal diseases is critical in preventing irreversible vision loss. Modern diagnostic tools like fundus photography and OCT allow doctors to detect eye issues at early stages. Our AI model uses deep learning (CNN) trained on thousands of labeled retinal images to instantly predict disease types with high accuracy. It is not a replacement for a medical diagnosis but can assist in faster screenings and awareness.
           </p>
         </div>
+
+        {/* Back link */}
         <div className="mt-10 text-center">
           <Link
             to="/"
@@ -110,9 +125,6 @@ function About() {
             ← Back to Home
           </Link>
         </div>
-      </div>
-      
-        
       </div>
     </div>
   );

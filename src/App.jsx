@@ -24,7 +24,7 @@ function App() {
       setPrediction("");
       setConfidence(null);
 
-      // Part 1: Get the prediction early (after 2s)
+      // 2 sec k bad
       setTimeout(async () => {
         const formData = new FormData();
         formData.append("file", file);
@@ -44,9 +44,8 @@ function App() {
           console.error("Error predicting:", err);
           setPrediction("Prediction failed. Try again.");
         }
-      }, 2000); // 👈 show result after 2 seconds
+      }, 2000); 
 
-      // Part 2: End scanning animation after 5s
       setTimeout(() => {
         setScanning(false);
         setScanned(true);
